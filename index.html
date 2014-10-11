@@ -2,11 +2,24 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <script src='vendor/three.js/build/three.min.js'></script>
 <script src='vendor/three.js/examples/js/controls/OrbitControls.js'></script>
+<script src='vendor/three.js/examples/js/controls/PointerLockControls.js'></script>
+<script src='vendor/three.js/examples/js/controls/DeviceOrientationControls.js'></script>
+
 <script src='bower_components/threex.videotexture/threex.videotexture.js'></script>
-<div style='position: absolute; top: 0px; width: 100%;font-family:arial; font-weight: bolder; padding-top: 5px;'>
-	Boilerplate for <a href="http://threejs.org" target="_blank">three.js</a>
-	- works on desktop and mobile
-</div><body style='margin: 0px; overflow: hidden; text-align:center;'><script>
+<div style='position: absolute; color: #black;top: 0px; width: 100%;font-family:arial; font-weight: bolder; padding-top: 5px;'>
+	THREE.js demo for 360 video vr - 
+	<a href="https://github.com/jeromeetienne/demo.videovr360" target="_blank">github</a>
+	- works on desktop and mobile<br/>	
+</div><div style='position:absolute; z-index: 10;'>
+	<br/>
+	<button onclick='switchValue(this.textContent);'>littleHouse 4096x2048</button><br/><br/>
+	<button onclick='switchValue(this.textContent);'>littleHouse 512x256</button><br/><br/>
+	<button onclick='switchValue(this.textContent);'>home 1024x512</button><br/><br/>
+	<button onclick='switchValue(this.textContent);'>home 512x256</button><br/><br/>
+	<button onclick='switchValue(this.textContent);'>Showreel video 256x128</button><br/><br/>
+	<button onclick='switchValue(this.textContent);'>Showreel video 1024x512</button><br/><br/>
+</div><body style='margin: 0px;; overflow: hidden; text-align:center;'><script>
+window.addEventListener('load', function() {
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Init
 	//////////////////////////////////////////////////////////////////////////////////
@@ -25,53 +38,89 @@
 	// init scene and camera
 	var scene	= new THREE.Scene();
 	var camera	= new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
-	camera.position.z = 2;
-	var controls	= new THREE.OrbitControls(camera)
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		add an object in the scene
+	//		Comment								//
 	//////////////////////////////////////////////////////////////////////////////////
-
-	// // add a torus	
-	// var geometry	= new THREE.TorusKnotGeometry(0.5-0.12, 0.12);
-	// var material	= new THREE.MeshNormalMaterial(); 
-	// var mesh	= new THREE.Mesh( geometry, material );
-	// scene.add( mesh );
+	
+	var isOnMobile	= 'ontouchstart' in document.documentElement
+	if( isOnMobile === false ){
+		camera.position.z = 0.1;
+		var controls	= new THREE.OrbitControls(camera)		
+	}else{
+		var controls	= new THREE.DeviceOrientationControls( camera );
+		controls.connect()
+		onRenderFcts.push(function(){
+			controls.update();
+		})		
+	}
+	
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		add an object in the scene
+	//		Comment								//
 	//////////////////////////////////////////////////////////////////////////////////
-
-	var url		= 'videos/Showreel_website_v3.mp4'
-	var videoTexture= new THREEx.VideoTexture(url)
-	onRenderFcts.push(function(){
-		videoTexture.update()
-	})
-
-
-	// var url		= 'images/2294472375_24a3b8ef46_o.jpg' 
-	// var texture	= THREE.ImageUtils.loadTexture(url);
 
 	// add a torus	
-	var geometry	= new THREE.SphereGeometry(4);
+	var geometry	= new THREE.SphereGeometry(50);
 	var material	= new THREE.MeshBasicMaterial({
-		side	: THREE.BackSide,
-		// map	: texture,
-		map	: videoTexture.texture,
+		// side	: THREE.BackSide,
 	}); 
 	var mesh	= new THREE.Mesh( geometry, material );
+	mesh.scale.x	= -1
 	scene.add( mesh );
 	
+
+	videoTexture	= null
+	onRenderFcts.push(function(){
+		if( videoTexture === null )	return
+		videoTexture.update()
+	})
+	switchValue('littleHouse 512x256')
+	window.switchValue	= switchValue
+	function switchValue(value){
+		if( videoTexture ){
+			videoTexture.destroy()
+			videoTexture	= null
+		}
+
+		if( value === 'littleHouse 4096x2048' ){
+			var url		= 'images/2294472375_24a3b8ef46_o-4096x2048.jpg' 
+			var texture	= THREE.ImageUtils.loadTexture(url);
+		}else if( value === 'littleHouse 512x256' ){
+			var url		= 'images/2294472375_24a3b8ef46_o-512x256.jpg' 
+			var texture	= THREE.ImageUtils.loadTexture(url);
+		}else if( value === 'home 1024x512' ){
+			var url		= 'images/PANO_20141006_183001-1024x512.jpg'
+			var texture	= THREE.ImageUtils.loadTexture(url);
+		}else if( value === 'home 512x256' ){
+			var url		= 'images/PANO_20141006_183001-512x256.jpg'
+			var texture	= THREE.ImageUtils.loadTexture(url);
+		}else if( value === 'Showreel video 256x128' ){
+			var url		= 'videos/Showreel_website_v3-256x128.mp4'
+			videoTexture= new THREEx.VideoTexture(url)
+			var texture	= videoTexture.texture
+		}else if( value === 'Showreel video 1024x512' ){
+			var url		= 'videos/Showreel_website_v3-1024x512.mp4'
+			videoTexture= new THREEx.VideoTexture(url)
+			var texture	= videoTexture.texture
+		}else	console.assert(false)
+
+		material.map	= texture;
+		material.needsUpdate	= true
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////
 	//		render the whole thing on the page
 	//////////////////////////////////////////////////////////////////////////////////
 
 	// handle window resize
-	window.addEventListener('resize', function(){
+	function onWindowResize(){
 		renderer.setSize( window.innerWidth, window.innerHeight )
 		camera.aspect	= window.innerWidth / window.innerHeight
 		camera.updateProjectionMatrix()		
-	}, false)
+	}
+	window.addEventListener('resize', onWindowResize, false)
+	setTimeout(onWindowResize, 100)
 
 	// render the scene
 	onRenderFcts.push(function(){
@@ -92,4 +141,5 @@
 			onRenderFct(deltaMsec/1000, nowMsec/1000)
 		})
 	})
+})
 </script></body>
