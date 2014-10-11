@@ -18,6 +18,9 @@
 	<button onclick='switchValue(this.textContent);'>home 512x256</button><br/><br/>
 	<button onclick='switchValue(this.textContent);'>Showreel video 256x128</button><br/><br/>
 	<button onclick='switchValue(this.textContent);'>Showreel video 1024x512</button><br/><br/>
+	<button onclick='switchValue(this.textContent);'>Batman paragling video 1920x1080</button><br/><br/>
+	<button onclick='switchValue(this.textContent);'>Batman paragling video 1024x576</button><br/><br/>
+	<button onclick='switchValue(this.textContent);'>Batman paragling video 512x288</button><br/><br/>
 </div><body style='margin: 0px;; overflow: hidden; text-align:center;'><script>
 window.addEventListener('load', function() {
 	//////////////////////////////////////////////////////////////////////////////////
@@ -62,9 +65,7 @@ window.addEventListener('load', function() {
 
 	// add a torus	
 	var geometry	= new THREE.SphereGeometry(50);
-	var material	= new THREE.MeshBasicMaterial({
-		// side	: THREE.BackSide,
-	}); 
+	var material	= new THREE.MeshBasicMaterial(); 
 	var mesh	= new THREE.Mesh( geometry, material );
 	mesh.scale.x	= -1
 	scene.add( mesh );
@@ -101,6 +102,14 @@ window.addEventListener('load', function() {
 			var texture	= videoTexture.texture
 		}else if( value === 'Showreel video 1024x512' ){
 			var url		= 'videos/Showreel_website_v3-1024x512.mp4'
+			videoTexture= new THREEx.VideoTexture(url)
+			var texture	= videoTexture.texture
+		}else if( value === 'Batman paragling video 1024x576' ){
+			var url		= 'videos/batman-paragliding-1024x576.m4v'
+			videoTexture= new THREEx.VideoTexture(url)
+			var texture	= videoTexture.texture
+		}else if( value === 'Batman paragling video 512x288' ){
+			var url		= 'videos/batman-paragliding-512x288.mp4'
 			videoTexture= new THREEx.VideoTexture(url)
 			var texture	= videoTexture.texture
 		}else	console.assert(false)
