@@ -4,13 +4,12 @@
 <script src='vendor/three.js/examples/js/controls/OrbitControls.js'></script>
 <script src='vendor/three.js/examples/js/controls/PointerLockControls.js'></script>
 <script src='vendor/three.js/examples/js/controls/DeviceOrientationControls.js'></script>
-<script src='vendor/three.js/examples/js/effects/StereoEffect.js'></script>
+
 <script src='bower_components/threex.videotexture/threex.videotexture.js'></script>
 <div style='position: absolute; color: grey;top: 0px; width: 100%;font-family:arial; font-weight: bolder; padding-top: 5px;'>
 	THREE.js demo for 360 video vr - 
 	<a href="https://github.com/jeromeetienne/demo.videovr360" target="_blank">github</a>
-	- works on desktop and mobile
-	- <a href='javascript:void(0)' onclick='toggleStereoEffect();'>toggle stereo</a>
+	- works on desktop and mobile<br/>	
 </div><div style='position:absolute; bottom: 0px; z-index: 10; font-size: 60%;'>
 	<br/>
 	<button onclick='switchValue(this.textContent);'>littleHouse-4096x2048</button>
@@ -39,44 +38,23 @@ window.addEventListener('load', function() {
 	// init scene and camera
 	var scene	= new THREE.Scene();
 	var camera	= new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comment								//
+	//////////////////////////////////////////////////////////////////////////////////
 	
-	//////////////////////////////////////////////////////////////////////////////////
-	//		camera controls
-	//////////////////////////////////////////////////////////////////////////////////
-
-	// enable OrbitControls by default
-	var controls	= new THREE.OrbitControls(camera)
-	controls.target.copy(camera.position).add(new THREE.Vector3(0,-0.5,-3))
-
-	function onDeviceOrientation(event){
-		// be sure this is a valid deviceorientation event
-		if( !event.alpha )	return;
-
-		// disable the THREE.OrbitControls
-		controls.enabled	= false
-
-		// setup the DeviceOrientationControls
-		controls = new THREE.DeviceOrientationControls(camera);
-		controls.connect();
-
-		// stop listening on deviceorientation
-		window.removeEventListener('deviceorientation', onDeviceOrientation, false);
-
-		// goto fullscreen on click
-		renderer.domElement.addEventListener('click', function(){
-			var domElement	= renderer.domElement
-			if(domElement.requestFullscreen)		domElement.requestFullscreen();
-			else if(domElement.msRequestFullscreen) 	domElement.msRequestFullscreen();
-			else if(domElement.mozRequestFullScreen)	domElement.mozRequestFullScreen();
-			else if(domElement.webkitRequestFullscreen)	domElement.webkitRequestFullscreen();
-		}, false);
+	var isOnMobile	= 'ontouchstart' in document.documentElement
+	if( isOnMobile === false ){
+		camera.position.z = 0.1;
+		var controls	= new THREE.OrbitControls(camera)		
+	}else{
+		var controls	= new THREE.DeviceOrientationControls( camera );
+		controls.connect()
+		onRenderFcts.push(function(){
+			controls.update();
+		})		
 	}
-	window.addEventListener('deviceorientation', onDeviceOrientation, false);
-
-	onRenderFcts.push(function(){
-		controls.update()
-	})
-
+	
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Comment								//
@@ -134,64 +112,22 @@ window.addEventListener('load', function() {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		StereoEffect
+	//		render the whole thing on the page
 	//////////////////////////////////////////////////////////////////////////////////
 
-	var stereoEffect	= null
-	function toggleStereoEffect(){
-		console.log('dd')
-		if( stereoEffect !== null ){
-			stereoEffect	= null
-		}else{
-			stereoEffect	= new THREE.StereoEffect(renderer);
-			stereoEffect.separation	= 0.003
-		}
-	}
-	window.toggleStereoEffect	= toggleStereoEffect
-
-	onRenderFcts.push(function(){
-		onWindowResize()
-
-		if( stereoEffect ){
-			stereoEffect.render(scene, camera);
-		}else{
-		 	renderer.render( scene, camera );		
-		}
-	})
-
-	//////////////////////////////////////////////////////////////////////////////////
-	//		Comment								//
-	//////////////////////////////////////////////////////////////////////////////////
-
+	// handle window resize
 	function onWindowResize(){
-		if( stereoEffect ){
-			stereoEffect.setSize( window.innerWidth, window.innerHeight );
-		}else{
-			renderer.setSize( window.innerWidth, window.innerHeight )
-		}
-
+		renderer.setSize( window.innerWidth, window.innerHeight )
 		camera.aspect	= window.innerWidth / window.innerHeight
 		camera.updateProjectionMatrix()		
 	}
 	window.addEventListener('resize', onWindowResize, false)
+	setTimeout(onWindowResize, 100)
 
-	//////////////////////////////////////////////////////////////////////////////////
-	//		render the whole thing on the page
-	//////////////////////////////////////////////////////////////////////////////////
-
-	// // handle window resize
-	// function onWindowResize(){
-	// 	renderer.setSize( window.innerWidth, window.innerHeight )
-	// 	camera.aspect	= window.innerWidth / window.innerHeight
-	// 	camera.updateProjectionMatrix()		
-	// }
-	// window.addEventListener('resize', onWindowResize, false)
-	// setTimeout(onWindowResize, 100)
-
-	// // render the scene
-	// onRenderFcts.push(function(){
-	// 	renderer.render( scene, camera );		
-	// })
+	// render the scene
+	onRenderFcts.push(function(){
+		renderer.render( scene, camera );		
+	})
 	
 	// run the rendering loop
 	var lastTimeMsec= null
