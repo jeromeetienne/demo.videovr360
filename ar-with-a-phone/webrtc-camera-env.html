@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<body style='margin: 0px;; overflow: hidden;'>
+<style>
+body, html {
+        height : 100%;
+}
+</style>
+<script>
+(function() {
+        'use strict;'
+
+        // create video element
+        var video        = document.createElement('video')
+        // video.setAttribute('width', '100%')
+        // video.setAttribute('height', '100%')
+        // video.setAttribute('object-fit', 'cover')
+        video.setAttribute('autoplay', true)
+        document.body.appendChild(video)
+
+        function onResize(){
+                if( video.videoHeight === 0 )   return
+
+                var videoAspect = video.videoWidth / video.videoHeight
+                var windowAspect = window.innerWidth / window.innerHeight
+
+                // var video = document.querySelector('video')
+                video.style.position = 'absolute'
+
+                if( videoAspect < windowAspect ){
+                        console.log('wide fit')
+                        video.style.left        = '0%'
+                        video.style.width       = window.innerWidth + 'px'
+                        video.style.marginLeft  = '0px'
+
+                        video.style.top         = '50%'
+                        video.style.height      =  (window.innerWidth/videoAspect) + 'px'
+                        video.style.marginTop   = -(window.innerWidth/videoAspect) /2 + 'px'                        
+                }else{
+                        video.style.top         = '0%'
+                        video.style.height      = window.innerHeight+'px'
+                        video.style.marginTop   =  '0px'
+
+
+                        video.style.left        = '50%'
+                        video.style.width       =  (window.innerHeight*videoAspect) + 'px'
+                        video.style.marginLeft  = -(window.innerHeight*videoAspect)/2 + 'px'
+                }
+        }
+
+        window.addEventListener('resize', function(event){
+                onResize()
+        })
+
+        setInterval(function(){
+                onResize()
+        }, 500)
+
+        // shim
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        window.URL      = window.URL || window.webkitURL;
+
+
+
+
+
+        MediaStreamTrack.getSources(function(sourceInfos) {
+
+                // find the video 
+                var videoSourceId;
+                for (var i = 0; i != sourceInfos.length; ++i) {
+                        var sourceInfo = sourceInfos[i];
+                        if(sourceInfo.kind == "video" && sourceInfo.facing == "environment") {
+                                videoSourceId = sourceInfo.id;
+                        }
+                }
+              
+
+                if( sourceInfo ){
+                        constraints = {
+                                audio: false,
+                                video: {
+                                        optional: [{sourceId: videoSourceId}]
+                                },
+                        }
+                }else{
+                        var constraints = {
+                                video: true,
+                                audio: false,                        
+                        }                        
+                }
+
+                navigator.getUserMedia( constraints, function(stream){
+                        onResize()
+                        video.src = URL.createObjectURL(stream);
+                        onResize()
+                        video.play();
+                        onResize()
+                }, function(error) {
+                        console.log("An error occured! ");
+                        console.dir(error)
+                });
+                
+                // var streaming = false
+                video.addEventListener('canplay', function(event){
+                        // if( streaming ) return
+                        var width = 320;
+                        var height = video.videoHeight / (video.videoWidth/width);
+                        streaming = true;
+                }, false);        
+        });
+        
+})();
+</script>
+</body>
+ 
