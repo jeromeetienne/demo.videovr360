@@ -32,5 +32,6 @@ To provide AR thru a phone.
 
 
 # Compatibility
-- able to play on mobile as cardboard VR or as normal apps
-- able to play on desktop
+- able to play on mobile as cardboard VR
+- able to play on mobile as normal apps
+- able to play on desktop 
