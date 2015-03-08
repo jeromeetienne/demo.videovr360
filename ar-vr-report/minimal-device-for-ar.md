@@ -1,5 +1,6 @@
 
 # Special Case: Minimal Device for AR
+
 * Augmented reality minimal devices is surprisingly simple to produce. It is in 
   fact very reachable with current technology. Something like tango phones. 
   TODO opaque screen,  depth sensors. Depth sensor is the newest. Kinect has

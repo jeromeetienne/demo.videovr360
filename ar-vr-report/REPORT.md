@@ -25,12 +25,14 @@ Here are possible fields:
   * is it available now ?
   * if not yet available, how far fetch it is ?
   * it goes into the feasibility of the product
-* How to interact with this reality? Joypad, depth sensors like kinect or leap 
-  motion. Keyboard. Issue of opaque display... You don't see your hands so simple
-  thing like topping on a keyboard is directly very hard when you wear and oculus
-* Is it mobile? Gear vr, Google cardboard are mobile. Oculus is not. Leap motion 
-  is not. Likely his to be in the future?
-* How to display it. Where is the screen for the user. Is there a single screens?
+* How to interact with this reality? Joypad, depth sensors like kinect or
+  leap motion. Keyboard. Issue of opaque display... You don't see your hands 
+  so simple thing like topping on a keyboard is directly very hard when 
+  you wear and oculus
+* Is it mobile? Gear vr, Google cardboard are mobile. Oculus is not. Leap
+  motion is not. Likely his to be in the future?
+* How to display it. Where is the screen for the user. Is there a single
+  screens?
   Or two, one for each eye. Is it see thru display. Is it more normal opaque 
   screen. Can user perceive depth
 * Relation between screen position and the latency issue to fool the brain
@@ -51,10 +53,11 @@ world must disapears.
 ### Old notes
 * Virtual reality is about an other reality. Not like the actual reality that 
   surround you. 
-* Virtual reality is close to the scope of entertainment because it can display 
-  any reality even the fixtuous ones. it goes from the realty displayed in game.
-  Level game. For games. Even GtaV. We can imagine how the actual movie industry
-  could use vR to display a new kind of movie
+* Virtual reality is close to the scope of entertainment because it can 
+  display any reality even the fixtuous ones. it goes from the realty 
+  displayed in game. Even GtaV. 
+* We can imagine how the actual movie industry could use vR to display a 
+  new kind of movie
 * Augmented reality is about modifying our reality.
 * The current works we live in.
 * It is a way more profound change. 
@@ -73,18 +76,26 @@ world must disapears.
 * device location
   * precision: gps is crap
   * using markers
+* keyboard
 
+### Product Available
+* kinect
+* leap motion
+* various joystick: joypad, other ?
+* device orientation
 
 ## Mobility
 * Real important when it comes to application
 * a mobile device provides more freedom
 * You can use it in the street potentially
 * To have wires conecting you to a computer limits your freedom
-* It is especially important in AR/VR because they are about giving freedom to access new spaces
-* 
+* It is especially important in AR/VR because they are about giving 
+  freedom to access new spaces
+* to have wireless devices make a great difference
 
 ## Do You put this one all the time or only some times with a specific purpose
-
-
-# AR is Cooler than VR ?
-* Both terms are hype at the moment
+* how long are they used
+  * it goes to confort, weight
+* it goes into privacy
+  * if a personn wears them in a restaurant, people around the users got some reasonable expectations of privacy
+  * when a personns wears them at work, people got other expectations of privacy
