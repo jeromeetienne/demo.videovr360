@@ -67,16 +67,20 @@ world must disapears.
 
 ## Interaction
 
+
 ### Type of inputs available
 * touch screen
   * any mobile devices, phone, or tablets
 * depth sensor
   * leap motion, kinect, tango
 * device orientation
+  * available on every mobile or tablets
 * device location
   * precision: gps is crap
   * using markers
 * keyboard
+  * require to actually see the keyboard
+  * so keyboard is very hard to use with devices like occulus 
 
 ### Product Available
 * kinect
@@ -87,8 +91,8 @@ world must disapears.
 ## Mobility
 * Real important when it comes to application
 * a mobile device provides more freedom
-* You can use it in the street potentially
 * To have wires conecting you to a computer limits your freedom
+* You can use it in the street potentially
 * It is especially important in AR/VR because they are about giving 
   freedom to access new spaces
 * to have wireless devices make a great difference

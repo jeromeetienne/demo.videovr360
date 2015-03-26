@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<script src='../../vendor/three.js/build/three.min.js'></script>
+<script src='../../vendor/three.js/examples/js/controls/OrbitControls.js'></script>
+<script src='../../vendor/three.js/examples/js/controls/PointerLockControls.js'></script>
+<script src='../../vendor/three.js/examples/js/controls/DeviceOrientationControls.js'></script>
+<style>
+body, html {
+        height : 100%;
+}
+</style>
+<body style='margin: 0px;; overflow: hidden; text-align:center; background: red;'><script>
+window.addEventListener('load', function() {
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Init
+	//////////////////////////////////////////////////////////////////////////////////
+
+	// init renderer
+	var renderer	= new THREE.WebGLRenderer({
+		antialias	: true,
+		alpha		: true,
+	});
+	renderer.setClearColor(new THREE.Color('black'), 0)
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+
+	// array of functions for the rendering loop
+	var onRenderFcts= [];
+
+	// init scene and camera
+	var scene	= new THREE.Scene();
+	var camera	= new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
+	// camera.position.z = -5
+	camera.position.y =  1
+	// camera.position.setLength(3)
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		camera controls
+	//////////////////////////////////////////////////////////////////////////////////
+
+	// TODO here put pointer locker controls when on desktop
+
+	// enable OrbitControls by default
+	var controls	= new THREE.OrbitControls(camera)
+	controls.target.copy(scene.position)
+
+	function onDeviceOrientation(event){
+		// be sure this is a valid deviceorientation event
+		if( !event.alpha )	return;
+
+		// disable the THREE.OrbitControls
+		controls.enabled	= false
+
+		// setup the DeviceOrientationControls
+		controls = new THREE.DeviceOrientationControls(camera);
+		controls.connect();
+
+		// stop listening on deviceorientation
+		window.removeEventListener('deviceorientation', onDeviceOrientation, false);
+
+		// goto fullscreen on click
+		renderer.domElement.addEventListener('click', function(){
+			var domElement	= renderer.domElement
+			if(domElement.requestFullscreen)		domElement.requestFullscreen();
+			else if(domElement.msRequestFullscreen) 	domElement.msRequestFullscreen();
+			else if(domElement.mozRequestFullScreen)	domElement.mozRequestFullScreen();
+			else if(domElement.webkitRequestFullscreen)	domElement.webkitRequestFullscreen();
+		}, false);
+	}
+	window.addEventListener('deviceorientation', onDeviceOrientation, false);
+
+	onRenderFcts.push(function(){
+		controls.update()
+	})
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+;(function(){
+	// add a env sphere	
+	var geometry	= new THREE.SphereGeometry(10, 32, 16);
+	var material	= new THREE.MeshBasicMaterial({
+                // opacity         : 0.5,
+                // transparent     : true,
+                // side            : THREE.DoubleSide,
+                // map 	: THREE.ImageUtils.loadTexture('../images/2294472375_24a3b8ef46_o-4096x2048.jpg')
+                map 	: THREE.ImageUtils.loadTexture('../../images/2294472375_24a3b8ef46_o-512x256.jpg'),
+        }); 
+	var mesh	= new THREE.Mesh( geometry, material );
+	mesh.scale.x	= -1
+	// scene.add( mesh );
+})()
+        
+        //////////////////////////////////////////////////////////////////////////////////
+        //                Comments
+        //////////////////////////////////////////////////////////////////////////////////
+        ;(function(){
+                var geometry    = new THREE.BoxGeometry(1,1,1)
+                var material    = new THREE.MeshNormalMaterial
+                var mesh        = new THREE.Mesh(geometry, material)
+                scene.add(mesh)
+        })()
+
+        //////////////////////////////////////////////////////////////////////////////////
+        //                Comments
+        //////////////////////////////////////////////////////////////////////////////////
+        ;(function(){
+		var texture	= THREE.ImageUtils.loadTexture('../../images/checker.png')
+		var texture	= THREE.ImageUtils.loadTexture('../../images/1657423_orig.png')
+		// texture.anisotropy	= renderer
+		
+                var geometry    = new THREE.CircleGeometry(1, 32)
+                var material    = new THREE.MeshBasicMaterial({
+			// map 	: THREE.ImageUtils.loadTexture( '../images/checker.png' ),
+			side	: THREE.DoubleSide,
+			map 	: texture,
+			opacity	: 0.5,
+			transparent: true,
+		})
+                var mesh        = new THREE.Mesh(geometry, material)
+		mesh.scale.multiplyScalar(10)
+		// mesh.position.y	= -1
+		mesh.rotation.x	= -Math.PI/2
+		// mesh.rotation.z += Math.PI/4
+		// mesh.lookAt(new THREE.Vector3(0,1,0))
+                scene.add(mesh)
+		window.scene	= scene
+        })()
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		StereoEffect
+	//////////////////////////////////////////////////////////////////////////////////
+
+	onRenderFcts.push(function(){
+		onWindowResize()
+	 	renderer.render( scene, camera );		
+	})
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+
+	function onWindowResize(){
+		renderer.setSize( window.innerWidth, window.innerHeight )
+		camera.aspect	= window.innerWidth / window.innerHeight
+		camera.updateProjectionMatrix()		
+	}
+	window.addEventListener('resize', onWindowResize, false)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		render the whole thing on the page
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	// run the rendering loop
+	var lastTimeMsec= null
+	requestAnimationFrame(function animate(nowMsec){
+		// keep looping
+		requestAnimationFrame( animate );
+		// measure time
+		lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
+		var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
+		lastTimeMsec	= nowMsec
+		// call each update function
+		onRenderFcts.forEach(function(onRenderFct){
+			onRenderFct(deltaMsec/1000, nowMsec/1000)
+		})
+	})
+	
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comments
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comments
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comments
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comments
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comments
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comments
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comments
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+;(function() {
+// return
+        'use strict;'
+
+        // create video element
+        var video        = document.createElement('video')
+        video.setAttribute('autoplay', true)
+        document.body.appendChild(video)
+
+	video.style.zIndex = -1
+        function onResize(){
+                if( video.videoHeight === 0 )   return
+
+                var videoAspect = video.videoWidth / video.videoHeight
+                var windowAspect = window.innerWidth / window.innerHeight
+
+                // var video = document.querySelector('video')
+                video.style.position = 'absolute'
+
+                if( videoAspect < windowAspect ){
+                        console.log('wide fit')
+                        video.style.left        = '0%'
+                        video.style.width       = window.innerWidth + 'px'
+                        video.style.marginLeft  = '0px'
+
+                        video.style.top         = '50%'
+                        video.style.height      =  (window.innerWidth/videoAspect) + 'px'
+                        video.style.marginTop   = -(window.innerWidth/videoAspect) /2 + 'px'                        
+                }else{
+                        video.style.top         = '0%'
+                        video.style.height      = window.innerHeight+'px'
+                        video.style.marginTop   =  '0px'
+
+
+                        video.style.left        = '50%'
+                        video.style.width       =  (window.innerHeight*videoAspect) + 'px'
+                        video.style.marginLeft  = -(window.innerHeight*videoAspect)/2 + 'px'
+                }
+        }
+
+        window.addEventListener('resize', function(event){
+                onResize()
+        })
+
+        // just to be sure
+        setInterval(function(){
+                onResize()
+        }, 500)
+
+        // shim
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        window.URL      = window.URL || window.webkitURL;
+
+
+        MediaStreamTrack.getSources(function(sourceInfos) {
+                // find the video 
+                var videoSourceId;
+                for (var i = 0; i != sourceInfos.length; ++i) {
+                        var sourceInfo = sourceInfos[i];
+                        if(sourceInfo.kind == "video" && sourceInfo.facing == "environment") {
+                                videoSourceId = sourceInfo.id;
+                        }
+                }
+              
+
+                if( sourceInfo ){
+                        constraints = {
+                                audio: false,
+                                video: {
+                                        optional: [{sourceId: videoSourceId}]
+                                },
+                        }
+                }else{
+                        var constraints = {
+                                video: true,
+                                audio: false,                        
+                        }                        
+                }
+
+                navigator.getUserMedia( constraints, function(stream){
+                        onResize()
+                        video.src = URL.createObjectURL(stream);
+                        onResize()
+                        video.play();
+                        onResize()
+                }, function(error) {
+                        console.log("An error occured! ");
+                        console.dir(error)
+                });
+                
+                // var streaming = false
+                video.addEventListener('canplay', function(event){
+                        // if( streaming ) return
+                        var width = 320;
+                        var height = video.videoHeight / (video.videoWidth/width);
+                        streaming = true;
+                }, false);        
+        });
+})();
+
+
+})
+</script>
+</body>

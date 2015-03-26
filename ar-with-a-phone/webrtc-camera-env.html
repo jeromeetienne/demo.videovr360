@@ -51,6 +51,7 @@ body, html {
                 onResize()
         })
 
+        // just to be sure
         setInterval(function(){
                 onResize()
         }, 500)
@@ -60,11 +61,7 @@ body, html {
         window.URL      = window.URL || window.webkitURL;
 
 
-
-
-
         MediaStreamTrack.getSources(function(sourceInfos) {
-
                 // find the video 
                 var videoSourceId;
                 for (var i = 0; i != sourceInfos.length; ++i) {
@@ -108,7 +105,6 @@ body, html {
                         streaming = true;
                 }, false);        
         });
-        
 })();
 </script>
 </body>
