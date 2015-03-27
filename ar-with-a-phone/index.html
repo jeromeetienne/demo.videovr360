@@ -10,7 +10,7 @@ body, html {
 }
 </style>
 <body style='margin: 0px;; overflow: hidden; text-align:center; background: red;'><script>
-window.addEventListener('load', function() {
+window.addEventListener('load', function(){
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Init
@@ -38,7 +38,7 @@ window.addEventListener('load', function() {
 	//		camera controls
 	//////////////////////////////////////////////////////////////////////////////////
 
-	// TODO here put pointer locker controls when on desktop
+	// TODO here put pointer locker controls when on desktop 
 
 	// enable OrbitControls by default
 	var controls	= new THREE.OrbitControls(camera)
@@ -64,40 +64,11 @@ window.addEventListener('load', function() {
 		controls.update()
 	})
 
-
-	//////////////////////////////////////////////////////////////////////////////////
-	//		Comment								//
-	//////////////////////////////////////////////////////////////////////////////////
-;(function(){
-	// add a env sphere	
-	var geometry	= new THREE.SphereGeometry(10, 32, 16);
-	var material	= new THREE.MeshBasicMaterial({
-                // opacity         : 0.5,
-                // transparent     : true,
-                // side            : THREE.DoubleSide,
-                // map 	: THREE.ImageUtils.loadTexture('images/2294472375_24a3b8ef46_o-4096x2048.jpg')
-                map 	: THREE.ImageUtils.loadTexture('../images/2294472375_24a3b8ef46_o-512x256.jpg'),
-        }); 
-	var mesh	= new THREE.Mesh( geometry, material );
-	mesh.scale.x	= -1
-	// scene.add( mesh );
-})()
         
         //////////////////////////////////////////////////////////////////////////////////
-        //                Comments
+        //                Add the compass in the middle 
         //////////////////////////////////////////////////////////////////////////////////
         ;(function(){
-                var geometry    = new THREE.BoxGeometry(1,1,1)
-                var material    = new THREE.MeshNormalMaterial
-                var mesh        = new THREE.Mesh(geometry, material)
-                scene.add(mesh)
-        })()
-
-        //////////////////////////////////////////////////////////////////////////////////
-        //                Comments
-        //////////////////////////////////////////////////////////////////////////////////
-        ;(function(){
-		var texture	= THREE.ImageUtils.loadTexture('../images/checker.png')
 		var texture	= THREE.ImageUtils.loadTexture('../images/1657423_orig.png')
 		// texture.anisotropy	= renderer
 		
